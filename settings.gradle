@@ -1,0 +1,7 @@
+include ':module-authenticate'
+include ':module-config'
+include ':core'
+include ':gateway'
+include ':module-home'
+include ':app'
+rootProject.name = "SimpleApp"
