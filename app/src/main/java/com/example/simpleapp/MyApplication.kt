@@ -5,9 +5,9 @@ import com.example.core.ProxyProvider
 import com.example.core.module
 import com.example.core.provides
 import com.example.modules.module.ModuleProxy
-import com.example.simpleapp.modules.author.authAppModule
-import com.example.simpleapp.modules.config.configAppModule
-import com.example.simpleapp.modules.home.homeAppModule
+import com.example.simpleapp.modules.authAppModule
+import com.example.simpleapp.modules.configAppModule
+import com.example.simpleapp.modules.homeAppModule
 
 @Suppress("unused")
 class MyApplication : Application() {

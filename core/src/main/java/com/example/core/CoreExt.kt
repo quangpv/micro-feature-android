@@ -42,6 +42,13 @@ inline fun <reified T : ViewModel> ViewModelStoreOwner.getViewModel(): T {
     return ViewModelProvider(this, ViewModelFactory)[T::class.java]
 }
 
+inline fun <reified T : MediatorViewModel<out Mediator>> ViewModelStoreOwner.getViewModel(mediator: Mediator): T {
+    return ViewModelProvider(this, ViewModelFactory)[T::class.java].also {
+        @Suppress("unchecked_cast")
+        (it as? MediatorOwner<Mediator>)?.mediator = mediator
+    }
+}
+
 fun <T> block(t: T, function: T.() -> Unit) {
     function(t)
 }

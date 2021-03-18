@@ -1,37 +1,45 @@
 package com.example.home.features.logout
 
 import android.view.View
+import androidx.lifecycle.viewModelScope
+import com.example.core.MediatorViewModel
 import com.example.core.block
 import com.example.core.getViewModel
-import com.example.core.lookup
-import com.example.core.observe
 import com.example.core.view
-import com.example.home.HomeEmitter
 import com.example.home.HomeFragment
+import com.example.home.HomeMediator
 import com.example.home.R
-import com.example.home.actions.GotoLoginAction
-import com.example.home.features.HomeCommand
 import com.example.home.features.HomeFeature
+import com.example.modules.authenticate.AuthenticateProxy
+import kotlinx.coroutines.launch
 
 class LogoutFeature : HomeFeature {
     private lateinit var btnLogout: View
 
-    private val emitter: HomeEmitter by lookup()
-
     override fun invoke(fragment: HomeFragment) = block(fragment) {
-        val viewModel = getViewModel<LogoutViewModel>()
+        val viewModel = getViewModel<LogoutViewModel>(mediator)
         btnLogout = view(R.id.btnLogout).apply { visibility = View.GONE }
 
         btnLogout.setOnClickListener {
             viewModel.logout()
         }
 
-        viewModel.logout.observe(viewLifecycleOwner) {
-            emitter.emit(GotoLoginAction(this@block))
+        mediator.loggedOut.observe(viewLifecycleOwner) {
+            btnLogout.visibility = View.GONE
         }
 
-        mediator.observe<HomeCommand.LoggedIn>(viewLifecycleOwner) {
+        mediator.loggedIn.observe(viewLifecycleOwner) {
             btnLogout.visibility = View.VISIBLE
+        }
+    }
+}
+
+class LogoutViewModel(private val proxy: AuthenticateProxy) : MediatorViewModel<HomeMediator>() {
+
+    fun logout() {
+        viewModelScope.launch {
+            proxy.logout()
+            mediator.loggedOut.call()
         }
     }
 }

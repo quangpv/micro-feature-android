@@ -1,12 +1,11 @@
 package com.example.authenticate
 
 import com.example.core.lookup
-import com.example.core.module
-import com.example.modules.module.ModuleEvent
 import com.example.modules.authenticate.AuthenticateProxy
 import com.example.modules.authenticate.UserModel
+import com.example.modules.module.ModuleEvent
 
-class AuthenticateProxyImpl(override val emit: ModuleEvent) :
+class AuthenticateGateway(override val emit: ModuleEvent) :
     AuthenticateProxy,
     AuthenticateEmitter {
     private val authorRepo: AuthorRepository by lookup()
