@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.View
 import android.widget.TextView
 import com.example.core.block
+import com.example.core.getViewModel
 import com.example.core.observe
 import com.example.core.viewBy
 import com.example.home.HomeFragment
@@ -15,17 +16,18 @@ class LoadConfigFeature : HomeFeature {
 
     @SuppressLint("SetTextI18n")
     override fun invoke(fragment: HomeFragment) = block(fragment) {
-        mediator.add(LoadConfigContract::class)
+        val viewModel = getViewModel<LoadConfigViewModel>()
+        mediator.add(viewModel)
 
         val btnLoadConfig = viewBy<TextView>(R.id.btnClickLoadConfig)
             .apply { visibility = View.VISIBLE }
 
         btnLoadConfig.setOnClickListener {
-            mediator.send(LoadConfigContract.Load)
+            viewModel.loadConfig()
         }
 
-        mediator.observe<LoadConfigContract.NewConfig>(viewLifecycleOwner) {
-            btnLoadConfig.text = "${btnLoadConfig.text} ${config.value}"
+        viewModel.newConfig.observe(viewLifecycleOwner) {
+            btnLoadConfig.text = "${btnLoadConfig.text} ${it.value}"
         }
 
         mediator.observe<HomeCommand.Collect>(viewLifecycleOwner) {
@@ -33,7 +35,7 @@ class LoadConfigFeature : HomeFeature {
         }
 
         mediator.observe<HomeCommand.LoggedIn>(viewLifecycleOwner) {
-            if (isLogged) btnLoadConfig.text = "(Logged In) ${btnLoadConfig.text}"
+            btnLoadConfig.text = "(Logged In) ${btnLoadConfig.text}"
         }
     }
 }

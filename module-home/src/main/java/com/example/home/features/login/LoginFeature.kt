@@ -1,8 +1,8 @@
 package com.example.home.features.login
 
 import android.view.View
-import androidx.lifecycle.lifecycleScope
 import com.example.core.block
+import com.example.core.getViewModel
 import com.example.core.lookup
 import com.example.core.observe
 import com.example.core.viewBy
@@ -19,7 +19,7 @@ class LoginFeature : HomeFeature {
     private val emitter: HomeEmitter by lookup()
 
     override fun invoke(fragment: HomeFragment) = block(fragment) {
-        mediator.add(LoginContract::class)
+        val viewModel = getViewModel<LoginViewModel>()
 
         btnLogin = viewBy<View>(R.id.btnGotoLogin).apply { visibility = View.VISIBLE }
 
@@ -29,19 +29,15 @@ class LoginFeature : HomeFeature {
             emitter.emit(GotoLoginAction(this))
         }
 
-        mediator.observe<LoginContract.LoggedIn>(viewLifecycleOwner) {
-            btnLogin.visibility = if (isLogged) View.GONE else View.VISIBLE
+        viewModel.loggedIn.observe(viewLifecycleOwner) {
+            btnLogin.visibility = View.GONE
+            mediator.send(HomeCommand.LoggedIn(it))
         }
 
         mediator.observe<HomeCommand.Collect>(viewLifecycleOwner) {
             payload["login"] = "login"
         }
 
-        fragment.viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            val command = if (userName.isBlank()) LoginContract.CheckAuth()
-            else LoginContract.LoggedIn(userName, true)
-
-            mediator.send(command)
-        }
+        viewModel.checkAuth(userName)
     }
 }

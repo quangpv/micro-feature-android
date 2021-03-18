@@ -18,7 +18,7 @@ class PreviewFeature : HomeFeature {
         val labelHome = viewBy<TextView>(R.id.labelHomePage).apply { visibility = View.VISIBLE }
 
         mediator.observe<HomeCommand.LoggedIn>(viewLifecycleOwner) {
-            if (isLogged) labelHome.text = "This is home to preview (Hello $userName)"
+            labelHome.text = "This is home to preview (Hello $userName)"
         }
     }
 }

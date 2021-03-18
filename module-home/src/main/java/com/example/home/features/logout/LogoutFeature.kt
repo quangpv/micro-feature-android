@@ -2,6 +2,7 @@ package com.example.home.features.logout
 
 import android.view.View
 import com.example.core.block
+import com.example.core.getViewModel
 import com.example.core.lookup
 import com.example.core.observe
 import com.example.core.view
@@ -18,20 +19,19 @@ class LogoutFeature : HomeFeature {
     private val emitter: HomeEmitter by lookup()
 
     override fun invoke(fragment: HomeFragment) = block(fragment) {
-        mediator.add(LogoutContract::class)
-
+        val viewModel = getViewModel<LogoutViewModel>()
         btnLogout = view(R.id.btnLogout).apply { visibility = View.GONE }
 
         btnLogout.setOnClickListener {
-            mediator.send(LogoutContract.Logout)
+            viewModel.logout()
+        }
+
+        viewModel.logout.observe(viewLifecycleOwner) {
+            emitter.emit(GotoLoginAction(this@block))
         }
 
         mediator.observe<HomeCommand.LoggedIn>(viewLifecycleOwner) {
-            if (isLogged) btnLogout.visibility = View.VISIBLE
-        }
-
-        mediator.observe<LogoutContract.BackToLogin>(viewLifecycleOwner) {
-            emitter.emit(GotoLoginAction(this@block))
+            btnLogout.visibility = View.VISIBLE
         }
     }
 }

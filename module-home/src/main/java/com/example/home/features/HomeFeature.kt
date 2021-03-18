@@ -8,10 +8,7 @@ interface HomeFeature {
 }
 
 object HomeCommand {
-    interface LoggedIn : Mediator.Command {
-        val isLogged: Boolean
-        val userName: String
-    }
+    class LoggedIn(val userName: String) : Mediator.Command
 
     class Collect(val payload: HashMap<String, Any> = hashMapOf()) : Mediator.Collect
 }
