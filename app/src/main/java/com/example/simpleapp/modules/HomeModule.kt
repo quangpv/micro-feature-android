@@ -1,6 +1,6 @@
 package com.example.simpleapp.modules
 
-import com.example.core.module
+import com.example.core.gateway
 import com.example.home.HomeGateway
 import com.example.home.actions.GotoLoginAction
 import com.example.home.homeModules
@@ -9,10 +9,8 @@ import com.example.modules.module.ModuleAction
 import com.example.modules.module.ModuleEvent
 import com.example.simpleapp.navigator
 
-val homeAppModule = module {
-    single<HomeProxy> { HomeGateway(HomeCoordinator()) }
-
-    modules(homeModules)
+val homeGateway = gateway<HomeProxy>(homeModules) {
+    HomeGateway(HomeCoordinator())
 }
 
 private class HomeCoordinator : ModuleEvent {

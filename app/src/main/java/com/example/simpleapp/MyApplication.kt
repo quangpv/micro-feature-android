@@ -5,9 +5,9 @@ import com.example.core.ProxyProvider
 import com.example.core.module
 import com.example.core.provides
 import com.example.modules.module.ModuleProxy
-import com.example.simpleapp.modules.authAppModule
-import com.example.simpleapp.modules.configAppModule
-import com.example.simpleapp.modules.homeAppModule
+import com.example.simpleapp.modules.authGateway
+import com.example.simpleapp.modules.configGateway
+import com.example.simpleapp.modules.homeGateway
 
 @Suppress("unused")
 class MyApplication : Application() {
@@ -18,9 +18,9 @@ class MyApplication : Application() {
             modules(defaultProxyModules)
 
             modules(
-                configAppModule,
-                homeAppModule,
-                authAppModule
+                configGateway,
+                homeGateway,
+                authGateway
             )
         }
     }

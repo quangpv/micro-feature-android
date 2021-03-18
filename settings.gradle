@@ -1,4 +1,5 @@
 include ':module-authenticate'
+include ':module-authenticate-alt'
 include ':module-config'
 include ':core'
 include ':gateway'

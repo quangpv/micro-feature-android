@@ -57,6 +57,16 @@ fun module(function: DependencyContext.() -> Unit): DependencyModule {
     return DependencyModule(function)
 }
 
+inline fun <reified T : Any> gateway(
+    diModule: DependencyModule,
+    noinline function: DependencyContext.() -> T
+): DependencyModule {
+    return module {
+        single { function() }
+        modules(diModule)
+    }
+}
+
 fun Application.provides(function: DependencyContext. () -> Unit) {
     diContext.single<Application> { this }
     diContext.single<Context> { this }
