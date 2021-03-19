@@ -3,13 +3,14 @@ package com.example.home.features.config
 import android.annotation.SuppressLint
 import android.view.View
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.core.block
 import com.example.core.getViewModel
 import com.example.core.viewBy
-import com.example.home.HomeFragment
+import com.example.home.HomeMediator
 import com.example.home.R
 import com.example.home.features.HomeFeature
 import com.example.modules.configure.ConfigModel
@@ -19,7 +20,7 @@ import kotlinx.coroutines.launch
 class LoadConfigFeature : HomeFeature {
 
     @SuppressLint("SetTextI18n")
-    override fun invoke(fragment: HomeFragment) = block(fragment) {
+    override fun invoke(fragment: Fragment, mediator: HomeMediator) = block(fragment) {
         val viewModel = getViewModel<LoadConfigViewModel>()
 
         val btnLoadConfig = viewBy<TextView>(R.id.btnClickLoadConfig)

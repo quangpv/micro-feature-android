@@ -3,6 +3,7 @@ package com.example.home.features.login
 import android.annotation.SuppressLint
 import android.view.View
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.core.BodyPart
@@ -20,14 +21,14 @@ import com.example.home.features.HomeFeature
 import com.example.modules.module.ModuleProxy
 import kotlinx.coroutines.launch
 
-class LoginFeature : HomeFeature {
+class GotoLoginFeature : HomeFeature {
     private lateinit var btnLogin: TextView
 
     private val emitter: HomeEmitter by lookup()
 
     @SuppressLint("SetTextI18n")
-    override fun invoke(fragment: HomeFragment) = block(fragment) {
-        val viewModel = getViewModel<LoginViewModel>(mediator)
+    override fun invoke(fragment: Fragment, mediator: HomeMediator) = block(fragment) {
+        val viewModel = getViewModel<GotoLoginViewModel>(mediator)
         val userName = arguments?.getString(HomeFragment.LOGGED) ?: ""
 
         btnLogin = viewBy<TextView>(R.id.btnGotoLogin).apply { visibility = View.VISIBLE }
@@ -57,7 +58,7 @@ class LoginFeature : HomeFeature {
     }
 }
 
-class LoginViewModel(private val proxy: ModuleProxy) : MediatorViewModel<HomeMediator>() {
+class GotoLoginViewModel(private val proxy: ModuleProxy) : MediatorViewModel<HomeMediator>() {
     private var mUserName = ""
 
     val validateFail = MutableLiveData<String>()

@@ -1,7 +1,6 @@
 package com.example.home.features
 
-import com.example.home.HomeFragment
+import com.example.core.MediatorFeature
+import com.example.home.HomeMediator
 
-interface HomeFeature {
-    operator fun invoke(fragment: HomeFragment)
-}
+interface HomeFeature : MediatorFeature<HomeMediator>

@@ -1,25 +1,27 @@
 package com.example.home.features.preview
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.View
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.core.Form
-import com.example.core.block
+import com.example.core.ViewRegistrable
 import com.example.core.getViewModel
 import com.example.core.viewBy
-import com.example.home.HomeFragment
+import com.example.home.HomeMediator
 import com.example.home.R
 import com.example.home.features.HomeFeature
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
-class PreviewFeature : HomeFeature {
+class PreviewFeature : HomeFeature, ViewRegistrable {
 
     @SuppressLint("SetTextI18n")
-    override fun invoke(fragment: HomeFragment) = block(fragment) {
+    override fun invoke(fragment: Fragment, mediator: HomeMediator) = onViewCreated(fragment) {
         val viewModel = getViewModel<PreviewViewModel>()
         val labelHome = viewBy<TextView>(R.id.labelHomePage).apply { visibility = View.VISIBLE }
 
@@ -41,7 +43,10 @@ class PreviewFeature : HomeFeature {
         mediator.loggedOut.observe(viewLifecycleOwner) {
             labelHome.text = "This is home page"
         }
+    }
 
+    override fun onDestroyView() {
+        Log.e("Clear", "Preview Feature")
     }
 }
 

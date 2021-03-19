@@ -57,7 +57,7 @@ fun module(function: DependencyContext.() -> Unit): DependencyModule {
     return DependencyModule(function)
 }
 
-inline fun <reified T : Any> gateway(
+inline fun <reified T : Any> gatewayModule(
     diModule: DependencyModule,
     noinline function: DependencyContext.() -> T
 ): DependencyModule {

@@ -4,13 +4,13 @@ import androidx.core.os.bundleOf
 import com.example.authenticate.AuthenticateGateway
 import com.example.authenticate.authenticateModules
 import com.example.authenticate.login.LoginSuccessAction
-import com.example.core.gateway
+import com.example.core.gatewayModule
 import com.example.modules.authenticate.AuthenticateProxy
 import com.example.modules.module.ModuleAction
 import com.example.modules.module.ModuleEvent
 import com.example.simpleapp.navigator
 
-val authGateway = gateway<AuthenticateProxy>(authenticateModules) {
+val authGateway = gatewayModule<AuthenticateProxy>(authenticateModules) {
     AuthenticateGateway(AuthorCoordinator())
 }
 

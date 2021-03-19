@@ -34,6 +34,10 @@ fun <T : View> Fragment.viewBy(id: Int): T {
     return requireView().findViewById(id)
 }
 
+infix fun <T> Boolean.then(feature: T): T? {
+    return if (this) feature else null
+}
+
 inline fun <reified T : ViewModel> ViewModelStoreOwner.viewModel(): Lazy<T> = lazy {
     ViewModelProvider(this, ViewModelFactory)[T::class.java]
 }
