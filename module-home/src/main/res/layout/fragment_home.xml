@@ -43,4 +43,12 @@
         android:text="Click to load config\n"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progress"
+        android:layout_gravity="center"
+        android:layout_width="32dp"
+        android:translationZ="20dp"
+        android:layout_height="32dp" />
 </FrameLayout>

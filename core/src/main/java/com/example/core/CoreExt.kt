@@ -46,11 +46,17 @@ inline fun <reified T : ViewModel> ViewModelStoreOwner.getViewModel(): T {
     return ViewModelProvider(this, ViewModelFactory)[T::class.java]
 }
 
-inline fun <reified T : MediatorViewModel<out Mediator>> ViewModelStoreOwner.getViewModel(mediator: Mediator): T {
-    return ViewModelProvider(this, ViewModelFactory)[T::class.java].also {
-        @Suppress("unchecked_cast")
-        (it as? MediatorOwner<Mediator>)?.mediator = mediator
-    }
+@Suppress("unchecked_cast")
+inline fun <reified T : MediatorOwner<out Mediator>> ViewModelStoreOwner.getViewModel(mediator: Mediator): T {
+    val mediatorClazz = T::class.java
+
+    if (!ViewModel::class.java.isAssignableFrom(mediatorClazz))
+        error("${mediatorClazz.simpleName} should be ViewModel")
+
+    val viewModelClazz = mediatorClazz.asSubclass(ViewModel::class.java)
+    val viewModel = ViewModelProvider(this, ViewModelFactory)[viewModelClazz] as T
+    (viewModel as MediatorOwner<Mediator>).mediator = mediator
+    return viewModel
 }
 
 fun <T> block(t: T, function: T.() -> Unit) {

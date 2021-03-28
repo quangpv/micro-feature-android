@@ -2,6 +2,7 @@ package com.example.home
 
 import com.example.core.module
 import com.example.core.then
+import com.example.home.features.StatusWindowFeature
 import com.example.home.features.config.LoadConfigFeature
 import com.example.home.features.config.LoadConfigViewModel
 import com.example.home.features.login.GotoLoginFeature
@@ -23,6 +24,7 @@ val homeModules = module {
         val settings = runCatching { get<ConfigProxy>().settings }.getOrNull()
         listOfNotNull(
             PreviewFeature(),
+            StatusWindowFeature(),
             (settings?.isEnableLogin ?: true) then GotoLoginFeature(),
             (settings?.isEnableLogout ?: true) then LogoutFeature(),
             (settings?.isEnableLoadConfig ?: true) then LoadConfigFeature(),

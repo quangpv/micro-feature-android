@@ -6,6 +6,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
+import com.example.core.BodyPart
+import com.example.core.MediatorOwner
 import com.example.core.block
 import com.example.core.getViewModel
 import com.example.core.launch
@@ -20,7 +22,7 @@ class LoadConfigFeature : HomeFeature {
 
     @SuppressLint("SetTextI18n")
     override fun invoke(fragment: Fragment, mediator: HomeMediator) = block(fragment) {
-        val viewModel = getViewModel<LoadConfigViewModel>()
+        val viewModel = getViewModel<LoadConfigViewModel>(mediator)
 
         val btnLoadConfig = viewBy<TextView>(R.id.btnClickLoadConfig)
             .apply { visibility = View.VISIBLE }
@@ -30,29 +32,52 @@ class LoadConfigFeature : HomeFeature {
         }
 
         viewModel.newConfig.observe(viewLifecycleOwner) {
-            btnLoadConfig.text = "${btnLoadConfig.text} ${it.value}"
-        }
-
-        mediator.collectForm.observe(viewLifecycleOwner) {
-            it += ConfigPart(viewModel.newConfig.value?.value ?: "")
+            btnLoadConfig.text = it
         }
 
         mediator.loggedIn.observe(viewLifecycleOwner) {
-            btnLoadConfig.text = "(Logged In) ${btnLoadConfig.text}"
+            viewModel.setLoggedIn(true)
         }
 
         mediator.loggedOut.observe(viewLifecycleOwner) {
-            btnLoadConfig.text = "Click to load config"
+            viewModel.setLoggedIn(false)
         }
 
+        mediator.collectForm.observe(viewLifecycleOwner) {
+            it += viewModel.createPart()
+        }
     }
 }
 
-class LoadConfigViewModel(private val proxy: ModuleProxy) : ViewModel() {
+class LoadConfigViewModel(private val proxy: ModuleProxy) : ViewModel(),
+    MediatorOwner<HomeMediator> {
+    override lateinit var mediator: HomeMediator
 
-    val newConfig = MediatorLiveData<ConfigModel>()
+    private var loggedIn = false
+    private var config: ConfigModel? = null
+
+    val newConfig = MediatorLiveData<String>()
 
     fun loadConfig() = launch {
-        newConfig.value = proxy.config.loadConfig()
+        config = proxy.config.loadConfig()
+        updateChange()
+    }
+
+    fun setLoggedIn(b: Boolean) {
+        loggedIn = b
+        updateChange()
+    }
+
+    fun createPart(): BodyPart {
+        return ConfigPart(config?.value ?: "")
+    }
+
+    private fun updateChange() {
+        newConfig.value = when {
+            loggedIn && config != null -> "(Logged In) ${config!!.value}"
+            loggedIn -> "(Logged In) Click to load config"
+            config != null -> "New config loaded: ${config!!.value}"
+            else -> "Click to load config"
+        }
     }
 }

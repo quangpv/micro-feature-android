@@ -4,6 +4,7 @@ import com.example.core.lookup
 import com.example.modules.authenticate.AuthenticateProxy
 import com.example.modules.authenticate.UserModel
 import com.example.modules.module.ModuleEvent
+import kotlinx.coroutines.delay
 
 class AuthenticateGateway(override val emit: ModuleEvent = ModuleEvent.Empty) :
     AuthenticateProxy,
@@ -19,6 +20,7 @@ class AuthenticateGateway(override val emit: ModuleEvent = ModuleEvent.Empty) :
     }
 
     override suspend fun logout() {
+        delay(1000)
         authorRepo.logout()
     }
 }

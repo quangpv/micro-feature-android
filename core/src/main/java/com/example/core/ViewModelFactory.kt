@@ -7,10 +7,20 @@ object ViewModelFactory : ViewModelProvider.Factory {
     private val defaultFactory = ViewModelProvider.NewInstanceFactory()
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return try {
+        val viewModel = try {
             diContext[modelClass.kotlin]
         } catch (e: Throwable) {
-            defaultFactory.create(modelClass)
+            try {
+                defaultFactory.create(modelClass)
+            } catch (t: Throwable) {
+                throw e
+            }
         }
+        onCreate(viewModel)
+        return viewModel
+    }
+
+    open fun onCreate(viewModel: ViewModel) {
+        if (viewModel is Creatable) viewModel.onCreate()
     }
 }
