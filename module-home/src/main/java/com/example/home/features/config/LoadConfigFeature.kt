@@ -6,16 +6,15 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.core.block
 import com.example.core.getViewModel
+import com.example.core.launch
 import com.example.core.viewBy
 import com.example.home.HomeMediator
 import com.example.home.R
 import com.example.home.features.HomeFeature
 import com.example.modules.configure.ConfigModel
 import com.example.modules.module.ModuleProxy
-import kotlinx.coroutines.launch
 
 class LoadConfigFeature : HomeFeature {
 
@@ -45,6 +44,7 @@ class LoadConfigFeature : HomeFeature {
         mediator.loggedOut.observe(viewLifecycleOwner) {
             btnLoadConfig.text = "Click to load config"
         }
+
     }
 }
 
@@ -52,7 +52,7 @@ class LoadConfigViewModel(private val proxy: ModuleProxy) : ViewModel() {
 
     val newConfig = MediatorLiveData<ConfigModel>()
 
-    fun loadConfig() = viewModelScope.launch {
+    fun loadConfig() = launch {
         newConfig.value = proxy.config.loadConfig()
     }
 }

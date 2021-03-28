@@ -5,7 +5,7 @@ import com.example.modules.authenticate.AuthenticateProxy
 import com.example.modules.authenticate.UserModel
 import com.example.modules.module.ModuleEvent
 
-class AuthenticateGateway(override val emit: ModuleEvent) :
+class AuthenticateGateway(override val emit: ModuleEvent = ModuleEvent.Empty) :
     AuthenticateProxy,
     AuthenticateEmitter {
     private val authorRepo: AuthorRepository by lookup()

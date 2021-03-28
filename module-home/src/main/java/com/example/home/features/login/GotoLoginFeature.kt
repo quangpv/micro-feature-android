@@ -5,11 +5,11 @@ import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.example.core.BodyPart
 import com.example.core.MediatorViewModel
 import com.example.core.block
 import com.example.core.getViewModel
+import com.example.core.launch
 import com.example.core.lookup
 import com.example.core.viewBy
 import com.example.home.HomeEmitter
@@ -19,7 +19,6 @@ import com.example.home.R
 import com.example.home.actions.GotoLoginAction
 import com.example.home.features.HomeFeature
 import com.example.modules.module.ModuleProxy
-import kotlinx.coroutines.launch
 
 class GotoLoginFeature : HomeFeature {
     private lateinit var btnLogin: TextView
@@ -63,7 +62,7 @@ class GotoLoginViewModel(private val proxy: ModuleProxy) : MediatorViewModel<Hom
 
     val validateFail = MutableLiveData<String>()
 
-    fun checkAuth(userName: String) = viewModelScope.launch {
+    fun checkAuth(userName: String) = launch {
         val name = if (userName.isNotBlank()) userName
         else proxy.authenticate.getUserLoggedIn().userName
 

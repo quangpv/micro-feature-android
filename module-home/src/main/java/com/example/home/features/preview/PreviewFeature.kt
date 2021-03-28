@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.core.Form
 import com.example.core.ViewRegistrable
 import com.example.core.getViewModel
+import com.example.core.launch
 import com.example.core.viewBy
 import com.example.home.HomeMediator
 import com.example.home.R
@@ -59,7 +60,7 @@ class PreviewViewModel : ViewModel() {
             loadError.value = "Home page with error ${form.errorMessage}"
             return
         }
-        viewModelScope.launch {
+        launch {
             val formData = form.build()
             preview.value =
                 "Home page with params ${formData.values.joinToString()} ${Random.nextInt()}"

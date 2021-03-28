@@ -6,4 +6,8 @@ interface ModuleEvent {
     }
 
     fun onEvent(action: ModuleAction)
+
+    object Empty : ModuleEvent {
+        override fun onEvent(action: ModuleAction) {}
+    }
 }

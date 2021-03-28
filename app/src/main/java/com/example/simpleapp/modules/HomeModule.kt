@@ -1,15 +1,17 @@
 package com.example.simpleapp.modules
 
-import com.example.core.gatewayModule
+import com.example.core.navigator
+import com.example.core.proxyModule
+import com.example.core.showFragment
 import com.example.home.HomeGateway
 import com.example.home.actions.GotoLoginAction
 import com.example.home.homeModules
 import com.example.modules.home.HomeProxy
 import com.example.modules.module.ModuleAction
 import com.example.modules.module.ModuleEvent
-import com.example.simpleapp.navigator
+import com.example.simpleapp.R
 
-val homeGateway = gatewayModule<HomeProxy>(homeModules) {
+val homeGateway = proxyModule<HomeProxy>(homeModules) {
     HomeGateway(HomeCoordinator())
 }
 
@@ -21,7 +23,7 @@ private class HomeCoordinator : ModuleEvent {
     override fun onEvent(action: ModuleAction) {
         when (action) {
             is GotoLoginAction -> action.fragment.navigator
-                .showFragment(LOGIN)
+                .showFragment(R.id.containerView, LOGIN)
         }
     }
 }

@@ -57,14 +57,19 @@ fun module(function: DependencyContext.() -> Unit): DependencyModule {
     return DependencyModule(function)
 }
 
-inline fun <reified T : Any> gatewayModule(
-    diModule: DependencyModule,
+inline fun <reified T : Any> proxyModule(
+    diModule: DependencyModule? = null,
     noinline function: DependencyContext.() -> T
 ): DependencyModule {
     return module {
         single { function() }
-        modules(diModule)
+        diModule?.apply { modules(this) }
     }
+}
+
+inline fun <reified T : Any> DependencyContext.proxyOf(vararg module: DependencyModule) {
+    single { ProxyProvider[T::class] }
+    modules(*module)
 }
 
 fun Application.provides(function: DependencyContext. () -> Unit) {

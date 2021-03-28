@@ -20,12 +20,12 @@ val homeModules = module {
     factory { LogoutViewModel(get()) }
 
     factory {
-        val settings = get<ConfigProxy>().settings
+        val settings = runCatching { get<ConfigProxy>().settings }.getOrNull()
         listOfNotNull(
             PreviewFeature(),
-            settings.isEnableLogin then GotoLoginFeature(),
-            settings.isEnableLogout then LogoutFeature(),
-            settings.isEnableLoadConfig then LoadConfigFeature(),
+            (settings?.isEnableLogin ?: true) then GotoLoginFeature(),
+            (settings?.isEnableLogout ?: true) then LogoutFeature(),
+            (settings?.isEnableLoadConfig ?: true) then LoadConfigFeature(),
         )
     }
 }

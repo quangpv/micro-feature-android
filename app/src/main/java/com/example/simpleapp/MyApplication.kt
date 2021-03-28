@@ -1,9 +1,8 @@
 package com.example.simpleapp
 
 import android.app.Application
-import com.example.core.ProxyProvider
-import com.example.core.module
 import com.example.core.provides
+import com.example.core.proxyOf
 import com.example.modules.module.ModuleProxy
 import com.example.simpleapp.modules.authGateway
 import com.example.simpleapp.modules.configGateway
@@ -15,17 +14,11 @@ class MyApplication : Application() {
         super.onCreate()
 
         provides {
-            modules(defaultProxyModules)
-
-            modules(
+            proxyOf<ModuleProxy>(
                 configGateway,
                 homeGateway,
                 authGateway
             )
         }
     }
-}
-
-val defaultProxyModules = module {
-    single { ProxyProvider[ModuleProxy::class] }
 }
